@@ -1,0 +1,9 @@
+.vs/
+.vshistory/
+x64/
+LumaX/
+
+LumaX.vcxproj
+LumaX.vcxproj.filters
+LumaX.vcxproj.user
+LumaX.sln
