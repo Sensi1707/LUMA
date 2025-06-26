@@ -1,4 +1,4 @@
-# LumaX - Astro Image Processor
+# LumaX - Light Unification and Manipulation Application
 
 LumaX is a C++ and Qt-based application for astrophotography image processing, inspired by PixInsight. It's designed as a learning project to explore core concepts of astronomical image calibration, registration, and integration.
 
