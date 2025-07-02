@@ -5,6 +5,8 @@
 #include <QMdiSubWindow>
 #include <QLayout>
 
+#include cfitsio.h
+
 // Konstruktor
 LumaX::LumaX(QWidget *parent)
     : QMainWindow(parent)
@@ -35,7 +37,7 @@ void LumaX::onFileOpen()
         this, // parent
         "Open Image", // title
         QDir::homePath(), // directory
-		"Images(*.png *.jpg *.jpeg);;All Files (*)" // filetype filter
+		"Images(*.png *.jpg *.jpeg);;Astro Images(*.fits *.fit);;All Files (*)" // filetype filter
     );
 
     if (filename.isEmpty())

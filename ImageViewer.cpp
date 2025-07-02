@@ -19,8 +19,6 @@ ImageViewer::ImageViewer(QWidget* parent)
 	// Weist dem ImageViewer (dem 'Betrachter') die gerade erstellte Szene zu.
 	// Ab jetzt weiß der View, welchen Inhalt er darstellen soll.
 	setScene(m_scene);
-    
-    resize(1200, 800);
 
     viewport()->setContentsMargins(0, 0, 0, 0);
 }
@@ -35,6 +33,16 @@ void ImageViewer::setImage(const QImage& image)
 {
 	m_scene->clear();
 	QPixmap pixmap = QPixmap::fromImage(image);
+
+    resetTransform();  // Alte Skalierung zurücksetzen
+
+	float scaleX = static_cast<float>(width()) / pixmap.width();
+	float scaleY = static_cast<float>(height()) / pixmap.height();
+	
+    float scaleFactor = std::min(scaleX, scaleY); // kleinster wert, damit nicht gestretcht & immer gleiches Seitenverhältnis
+
+    scale(scaleFactor, scaleFactor);
+
 	m_scene->addPixmap(pixmap);
 }
 
@@ -52,25 +60,25 @@ void ImageViewer::wheelEvent(QWheelEvent* event)
 {
     // 1. Fall: STRG gedrückt -> Horizontal scrollen
     if (event->modifiers() & Qt::ControlModifier) {
-        if (event->angleDelta().y() > 0) {
-            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - 20);
+		if (event->angleDelta().y() > 0) { // nach oben scrollen
+			horizontalScrollBar()->setValue(horizontalScrollBar()->value() - 20); // 20 Pixel nach links scrollen
         }
-        else {
-            horizontalScrollBar()->setValue(horizontalScrollBar()->value() + 20);
+		else { // nach unten scrollen
+			horizontalScrollBar()->setValue(horizontalScrollBar()->value() + 20); // 20 Pixel nach rechts scrollen
         }
     }
 
     // 2. Fall: SHIFT gedrückt -> Vertikal scrollen
     else if (event->modifiers() & Qt::ShiftModifier) {
-        if (event->angleDelta().y() > 0) {
-            verticalScrollBar()->setValue(verticalScrollBar()->value() - 20);
+		if (event->angleDelta().y() > 0) { // nach oben scrollen
+			verticalScrollBar()->setValue(verticalScrollBar()->value() - 20); // 20 Pixel nach oben scrollen
         }
-        else {
-            verticalScrollBar()->setValue(verticalScrollBar()->value() + 20);
+		else { // nach unten scrollen
+			verticalScrollBar()->setValue(verticalScrollBar()->value() + 20); // 20 Pixel nach unten scrollen
         }
     }
     
-    // 3. Fall: Keine Modifier-Taste -> Zoomen
+    // 3. Fall: Keine Taste -> Zoomen
     else {
 		qreal currentScale = transform().m11(); // Aktuelle Skalierung abrufen
         setTransformationAnchor(QGraphicsView::AnchorUnderMouse); // Wichtig für intuitives Zoomen
